@@ -1,0 +1,4 @@
+mixOmics
+========
+
+mixOmics R package
