@@ -312,3 +312,87 @@ function (object,
         }
     }
 }
+
+
+#-------------------------- RGCCA -------------------------#
+plotIndiv.rgcca <- plotIndiv.sgcca <-
+  function (object, 
+            comp = 1:2, 
+            ind.names = TRUE,
+            rep.space = "XY-variate",
+            x.label = NULL, 
+            y.label = NULL,
+            col = "black", 
+            cex = 1, 
+            pch = 1,
+            A,
+            ...) 
+  {
+    
+    # validation des arguments #
+    #--------------------------#
+    if (length(comp) != 2)
+      stop("'comp' must be a numeric vector of length 2.")
+    
+    if (!is.numeric(comp) || any(comp < 1))
+      stop("invalid vector for 'comp'.")
+    
+    dim = min(ncol(A$X), ncol(A$Y))    
+    if (any(comp > dim)) 
+      stop("the elements of 'comp' must be smaller or equal than ", dim, ".")
+    
+    if (is.logical(ind.names)) {
+      if (isTRUE(ind.names)) ind.names = object$names$indiv
+    }
+    
+    if (length(ind.names) > 1) {
+      if (length(ind.names) != nrow(A$X))
+        stop("'ind.names' must be a character vector of length ", nrow(A$X), " or a boolean atomic vector.")
+    }
+    
+    comp1 = round(comp[1])
+    comp2 = round(comp[2])
+    rep.space = match.arg(rep.space, c("XY-variate", "X-variate", "Y-variate"))
+    object$variates <- object$Y
+    names(object$variates) <- c("X","Y")
+    
+    # l'espace de représentation #
+    #----------------------------#
+    if (rep.space == "X-variate") {
+      x = object$variates$X[, comp1]
+      y = object$variates$X[, comp2]
+    }
+    
+    if (rep.space == "Y-variate") {
+      x = object$variates$Y[, comp1]
+      y = object$variates$Y[, comp2]
+    }
+    
+    if (rep.space == "XY-variate"){
+      x = (object$variates$X[, comp1] + object$variates$Y[, comp1]) / 2
+      y = (object$variates$X[, comp2] + object$variates$Y[, comp2]) / 2
+    }
+    
+    if (is.null(x.label)) x.label = paste("Dimension ", comp1)
+    if (is.null(y.label)) y.label = paste("Dimension ", comp2)
+    
+    # le plot des individus #
+    #-----------------------#
+    if (length(ind.names) > 1) {
+      plot(x, y, type = "n", xlab = x.label, ylab = y.label)
+      text(x, y, ind.names, col = col, cex = cex, ...)
+      abline(v = 0, h = 0, lty = 2)
+    }
+    else {
+      if (isTRUE(ind.names)) {
+        plot(x, y, type = "n", xlab = x.label, ylab = y.label)
+        text(x, y, ind.names, col = col, cex = cex, ...)
+        abline(v = 0, h = 0, lty = 2)
+      }
+      else {
+        plot(x, y, xlab = x.label, ylab = y.label, 
+             col = col, cex = cex, pch = pch)
+        abline(v = 0, h = 0, lty = 2)
+      }
+    }
+  }
