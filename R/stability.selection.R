@@ -159,14 +159,9 @@ stability.function.spls=function(X, Y = NULL,
 		m=num.method
 		}
 	m=nrow(indice.boot) #should be the same as the m before; to check
-print(m)
 	Xh=X2
 	Yh=Y
-	print(indice.X2)
-	print(indice.X)
-	print(nzv$Position)
-	print(dim(Xh))
-	
+		
 #----------------- deflation of X and Y, if ncomp>1 
 	if(ncomp>1) 
 	{
