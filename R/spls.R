@@ -318,7 +318,7 @@ function(X,
                   variates = list(X = mat.t, Y = mat.u),
                   loadings = list(X = mat.a, Y = mat.b),
                   names = list(X = X.names, Y = Y.names, indiv = ind.names))
-    if (near.zero.var == T & length(nzv$Position > 0)) result$nzv = nzv
+    if (near.zero.var == TRUE) result$nzv = nzv
 
     class(result) = c("spls", "pls") 
     return(invisible(result))
